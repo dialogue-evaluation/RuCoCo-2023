@@ -1,0 +1,4 @@
+pytorch-lightning
+spacy==3.2.1
+torch==1.13.1
+transformers==4.15.0
