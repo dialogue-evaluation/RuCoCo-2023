@@ -1,5 +1,5 @@
 # RuCoCo-2023
-Соревнование по разрешению кореферентности для русского языка
+Соревнование по разрешению кореферентности для русского языка ([CodaLab](https://codalab.lisn.upsaclay.fr/competitions/9669))
 
 
 ## Описание
@@ -19,12 +19,13 @@
 "text": "Лидеры европейских стран собрались на неформальный саммит в Брюсселе, где должны выработать единую позицию по иракской проблеме. По итогам понедельника они заявили, что считают...\n"
 }
 ```
-[[0, 24], [152, 155]] относится к спану <strong>Лидеры европейских стран</strong><sub>0</sub> и <strong>они</strong><sub>0</sub> <br />
-[60, 68], [70, 73]] к <strong>Брюсселе</strong><sub>1</sub>, <strong>где</strong><sub>1</sub>.
+`[[0, 24], [152, 155]]` относится к спанам <strong>Лидеры европейских стран</strong><sub>0</sub> и <strong>они</strong><sub>0</sub> <br />
+`[[60, 68], [70, 73]]` к <strong>Брюсселе</strong><sub>1</sub>, <strong>где</strong><sub>1</sub>.
 
 Случаи с расщепленными антецедентами, т.е. когда сущности являются частью одной большой "родительской" сущности, мы выделяем отдельно.
 Пример такого случая: <strong>Tom</strong> и <strong>Sid</strong> в "родительской" сущности <strong>they</strong> в этом предложении:
-At half-past nine, that night, <u><strong>Tom</strong></u><sub>0</sub><u> and <strong>Sid</strong></u><sub>1,2</sub> were sent to bed, as usual. <u>They</u><sub>2</sub> said their prayers, and <strong>Sid</strong><sub>1</sub> was soon asleep.<br /></p>
+> At half-past nine, that night, <u><strong>Tom</strong></u><sub>0</sub><u> and <strong>Sid</strong></u><sub>1</sub> were sent to bed, as usual. <u>They</u><sub>0,2</sub> said their prayers, and <strong>Sid</strong><sub>1</sub> was soon asleep.<br /></p>
+
 В разметке JSON-файлов для обозначения этого явления используется ключ "include":
 ```
 {
@@ -33,7 +34,7 @@ At half-past nine, that night, <u><strong>Tom</strong></u><sub>0</sub><u> and <s
 "text": "Лидеры европейских стран собрались на неформальный саммит в Брюсселе, где должны выработать единую позицию по иракской проблеме. По итогам понедельника они заявили, что считают...\n"
 }
 ```
-Где <strong>"includes" : [[], [], [0, 1]]</strong> в этом случае обозначает, что сущность #2 (<i>Tom and Sid, they</i>) - это родительская сущность по отношению к сущности 0 (<i>Tom</i>) и 1 (<i>Sid</i>).
+Где <strong>"includes" : `[[], [], [0, 1]]`</strong> в этом случае обозначает, что сущность #2 (<i>Tom and Sid, they</i>) - это родительская сущность по отношению к сущности 0 (<i>Tom</i>) и 1 (<i>Sid</i>).
 
 
 ## Полезные ссылки
@@ -46,7 +47,7 @@ At half-past nine, that night, <u><strong>Tom</strong></u><sub>0</sub><u> and <s
 Для расщепленных антецедентов и их родительских сущностей скор рассчитывается отдельно, как для еще одной цепочки.
 
 ## Базовое решение
-Код базового решения находится в папке [baseline](baseline), описание в [статье корпуса RuCoCo](https://www.dialog-21.ru/media/5756/dobrovolskiivaplusetal072.pdf), решение представлено русской версией RoBERTa (от Sber AI).
+Код базового решения находится в папке [baseline](baseline), описание в [статье корпуса RuCoCo](https://www.dialog-21.ru/media/5756/dobrovolskiivaplusetal072.pdf), решение построено с использованием в качестве энкодера модели ruRoberta-large (от Sber AI).
 
 ## Таймлайн соревнования:
 - 13 января — публикация train и dev датасетов, тестовых данных;
