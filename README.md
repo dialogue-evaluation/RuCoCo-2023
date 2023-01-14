@@ -19,7 +19,7 @@
 "text": "Лидеры европейских стран собрались на неформальный саммит в Брюсселе, где должны выработать единую позицию по иракской проблеме. По итогам понедельника они заявили, что считают...\n"
 }
 ```
-[[0, 24], [152, 155]] относится к спану <strong>Лидеры европейских стран</strong><sub>0</sub> и <strong>они</strong><sub>0</sub>
+[[0, 24], [152, 155]] относится к спану <strong>Лидеры европейских стран</strong><sub>0</sub> и <strong>они</strong><sub>0</sub> <br />
 [60, 68], [70, 73]] к <strong>Брюсселе</strong><sub>1</sub>, <strong>где</strong><sub>1</sub>.
 
 Случаи с расщепленными антецедентами, т.е. когда сущности являются частью одной большой "родительской" сущности, мы выделяем отдельно.
@@ -37,6 +37,7 @@ At half-past nine, that night, <u><strong>Tom</strong></u><sub>0</sub><u> and <s
 
 
 ## Полезные ссылки
+- [Группа в телеграме](https://t.me/rucoco2023)
 - [Инструкция для аннотаторов](https://github.com/vdobrovolskii/rucoco/blob/master/coreference_guidelines.md)
 - [Статья по корпусу RuCoCo](https://www.dialog-21.ru/media/5756/dobrovolskiivaplusetal072.pdf)
 
@@ -45,7 +46,7 @@ At half-past nine, that night, <u><strong>Tom</strong></u><sub>0</sub><u> and <s
 Для расщепленных антецедентов и их родительских сущностей скор рассчитывается отдельно, как для еще одной цепочки.
 
 ## Базовое решение
-Увидеть базовое решение можно в папке [baseline](baseline), описание в [статье корпуса RuCoCo](https://www.dialog-21.ru/media/5756/dobrovolskiivaplusetal072.pdf), решение представлено русской версией RoBERTa (от Sber AI).
+Код базового решения находится в папке [baseline](baseline), описание в [статье корпуса RuCoCo](https://www.dialog-21.ru/media/5756/dobrovolskiivaplusetal072.pdf), решение представлено русской версией RoBERTa (от Sber AI).
 
 ## Таймлайн соревнования:
 - 13 января — публикация train и dev датасетов, тестовых данных;
