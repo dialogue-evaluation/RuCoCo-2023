@@ -34,24 +34,25 @@
 "text": "At half-past nine, that night, Tom and Sid were sent to bed, as usual. They said their prayers, and Sid was soon asleep\n"
 }
 ```
-Где <strong>"includes" : `[[], [], [0, 1]]`</strong> в этом случае обозначает, что сущность #2 (<i>Tom and Sid, they</i>) - это родительская сущность по отношению к сущности 0 (<i>Tom</i>) и 1 (<i>Sid</i>).
+Где "includes" : `[[], [], [0, 1]]` в этом случае обозначает, что сущность #2 (<i>Tom and Sid, they</i>) - это родительская сущность по отношению к сущности 0 (<i>Tom</i>) и 1 (<i>Sid</i>).
 
 
 ## Полезные ссылки
+- [Соревнование на CodaLab](https://codalab.lisn.upsaclay.fr/competitions/9669)
 - [Группа в телеграме](https://t.me/rucoco2023)
 - [Инструкция для аннотаторов](https://github.com/vdobrovolskii/rucoco/blob/master/coreference_guidelines.md)
 - [Статья по корпусу RuCoCo](https://www.dialog-21.ru/media/5756/dobrovolskiivaplusetal072.pdf)
 
 ## Оценка решений
 Для оценки решений мы используем метрику LEA (a Link-based Entity Aware metric), прочитать про нее можно в оригинальной статье [Moosavi and Strube (2016)](https://aclanthology.org/P16-1060.pdf) или в [статье корпуса RuCoCo](https://www.dialog-21.ru/media/5756/dobrovolskiivaplusetal072.pdf).
-Для расщепленных антецедентов и их родительских сущностей скор рассчитывается отдельно, как для еще одной цепочки.
+Для расщепленных антецедентов и их родительских сущностей скор рассчитывается отдельно, как для еще одной цепочки. В нашем репозитории можно посмотреть [скрипт с оценкой](https://github.com/dialogue-evaluation/RuCoCo-2023/blob/main/evaluate.py).
 
 ## Базовое решение
 Код базового решения находится в папке [baseline](baseline), описание в [статье корпуса RuCoCo](https://www.dialog-21.ru/media/5756/dobrovolskiivaplusetal072.pdf), решение построено с использованием в качестве энкодера модели ruRoberta-large (от Sber AI).
 
 ## Таймлайн соревнования:
 - 13 января — публикация train и dev датасетов, тестовых данных;
-- 13 марта 23:59 (GMT +3) — последний день для отправки решений в фазе public;
+- 16 марта 23:59 (GMT +3) — последний день для отправки решений в фазе public;
 - 19 марта 23:59 (GMT +3) — последний день для отправки решений в фазе private;
 - 1 апреля — дедлайн для подачи статьи.
 
