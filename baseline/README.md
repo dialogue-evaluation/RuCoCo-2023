@@ -1,6 +1,8 @@
 This is a simple neural baseline model which is only capable of predicting identity-coreference links, but is not able to predict links to split antecedents. \
 The default model uses `sberbank-ai/ruRoberta-large` as the encoder.
 
+The architecture is loosely based on these two papers: [Lee et al., 2018](https://aclanthology.org/N18-2108); [Joshi et al., 2020](https://aclanthology.org/D19-1588). The main differences are in dropping the higher-order iterative approach (following [Xu et al., 2020](https://aclanthology.org/2020.emnlp-main.686.pdf)), simpler span encoding (following [Dobrovolskii, 2021](https://aclanthology.org/2021.emnlp-main.605)) and using rule-based span extraction.
+
 Tested on Python 3.9.15.
 
 Install the dependencies:

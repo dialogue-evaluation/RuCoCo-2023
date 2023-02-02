@@ -56,7 +56,11 @@ class CorefModel(pl.LightningModule):
 
     def forward(self, doc: Doc) -> Tuple[torch.Tensor, torch.Tensor]:
 
-        # Encoding spans
+        # Encoding spans ################
+
+        # The input batches of the document are processed independently by a BERT-like model,
+        # then the last hidden states of all the batch outputs are taken, exluding special tokens (cls, sep and pad)
+        # This gives us embs - [n_tokens, emb] matrix with token embeddings
         input_ids, attention_mask = doc.encoding.input_ids.to(self.device), doc.encoding.attention_mask.to(self.device)
         if not self.training or self.max_batches_train is None or len(input_ids) <= self.max_batches_train:
             embs = self.encoder(input_ids=input_ids, attention_mask=attention_mask).last_hidden_state
@@ -67,40 +71,59 @@ class CorefModel(pl.LightningModule):
                                                   attention_mask=attention_mask[selected_batches]).last_hidden_state
         embs = embs[doc.flattening_mask]                                                    # [n_tokens, emb]
 
+        # We transform a matrix of span starts and ends into an [n_spans, n_tokens] boolean mask,
+        # which for i-th row will have 1 at positions of tokens that are part of the i-th span
         spans = torch.tensor(list(doc.all_spans), dtype=torch.long, device=self.device)     # [n_spans, 2]
         indices = torch.arange(0, len(embs), device=self.device).unsqueeze(0).expand(len(spans), len(embs))
         span_mask = (indices >= spans[:, 0].unsqueeze(1)) * (indices < spans[:, 1].unsqueeze(1))
         span_mask = torch.log(span_mask.to(torch.float))
 
+        # Each token representation is passed through trainable token importance linear layer
+        # The obtained scores are then softmaxed for each span
+        # This way, if a span consists of one token, this token's embeddings will have 1.0 of the weight
+        # While, for example, for a two-token span with scores of [1.2, 2.6] the weights will be [0.2, 0.8]
         token_scores = self.token_importance_linear(embs).squeeze(1)                        # [n_tokens]
         token_scores = token_scores.unsqueeze(0).expand(len(spans), len(embs))              # [n_spans, n_tokens]
         token_scores = torch.softmax(token_scores + span_mask, dim=1)
 
+        # Span representations are obtained as weighted sums of the token representations of the span
         embs = token_scores.mm(embs)                                                        # [n_spans, emb]
         embs = self.span_dropout(embs)
 
-        # Coarse span pair scoring
+        # Coarse span pair scoring ######
 
+        # We set to -inf the scores of all span pairs (i, j) where i <= j (we only predict right to left links)
         pair_mask = torch.arange(0, len(embs), device=self.device)
         pair_mask = pair_mask.unsqueeze(1) - pair_mask.unsqueeze(0)
         pair_mask = torch.log((pair_mask > 0).to(torch.float))                              # [n_spans, n_spans]
 
+        # Coarse coreference scores are obtained as S ⋅ W ⋅ S.T,
+        #   where S is the matrix of span representations
+        #   and W is a matrix of trainable weights
+        # The pair mask is added to the scores to mask the links between undesired positions
         coarse_scores = self.coarse_dropout(self.coarse_bilinear(embs)).mm(embs.T)
         coarse_scores = pair_mask + coarse_scores                                           # [n_spans, n_spans]
 
+        # Top scoring antecedents are taken further for expensive fine span pair scoring
         top_scores, top_indices = torch.topk(coarse_scores,                                 # [n_spans, n_ants]
                                              k=min(self.k, len(coarse_scores)),
                                              dim=1, sorted=False)
 
-        # Fine span pair scoring
+        # Fine span pair scoring ########
 
+        # Fine scores are obtained by first building the pair matrix: a concatenation of the following:
+        #   a_spans: embeddings of all spans in the documents
+        #   b_spans: embeddings of top-k antecedents for each span of the document
+        #   similarity: element-wise product of a_spans and b_spans
         a_spans = embs.unsqueeze(1).expand(embs.shape[0], top_scores.shape[1], embs.shape[1])
         b_spans = embs[top_indices]
         similarity = a_spans * b_spans
         pair_matrix = torch.cat((a_spans, b_spans, similarity), dim=2)                  # [n_spans, n_ants, pair_emb]
 
+        # The resulting pair matrix is passed through dense layers
         fine_scores = self.fine_linear(pair_matrix).squeeze(2)                          # [n_spans, n_ants]
 
+        # Fine scores and coarse scores are added together (important for training)
         return fine_scores + top_scores, top_indices
 
     @staticmethod
