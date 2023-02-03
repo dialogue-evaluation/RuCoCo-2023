@@ -1,5 +1,5 @@
 # RuCoCo-2023
-Соревнование по разрешению кореферентности для русского языка ([CodaLab](https://codalab.lisn.upsaclay.fr/competitions/9669))
+Соревнование по разрешению кореферентности для русского языка ([CodaLab](https://codalab.lisn.upsaclay.fr/competitions/10273))
 
 
 ## Описание
@@ -38,7 +38,7 @@
 
 
 ## Полезные ссылки
-- [Соревнование на CodaLab](https://codalab.lisn.upsaclay.fr/competitions/9669)
+- [Соревнование на CodaLab](https://codalab.lisn.upsaclay.fr/competitions/10273)
 - [Группа в телеграме](https://t.me/rucoco2023)
 - [Инструкция для аннотаторов](https://github.com/vdobrovolskii/rucoco/blob/master/coreference_guidelines.md)
 - [Статья по корпусу RuCoCo](https://www.dialog-21.ru/media/5756/dobrovolskiivaplusetal072.pdf)
