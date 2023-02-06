@@ -1,6 +1,7 @@
 # RuCoCo-2023
 Соревнование по разрешению кореферентности для русского языка ([CodaLab](https://codalab.lisn.upsaclay.fr/competitions/10273))
 
+<a href="https://creativecommons.org/licenses/by-nc/4.0/"><img src="https://img.shields.io/static/v1?label=license&message=CC-BY-4.0&color=green"/></a>
 
 ## Описание
 Мы приглашаем вас поучаствовать в соревновании по поиску кореферентных выражений в новостных текстах на русском языке. Кореферентными считаются языковые выражения, соответствующие одному объекту действительности, например:
